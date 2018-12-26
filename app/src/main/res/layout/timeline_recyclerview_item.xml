@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imgView_SubjectImage"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:scaleType="fitXY"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignBottom="@+id/imgView_SubjectImage"
+        android:layout_alignParentBottom="false"
+        android:background="@color/colorSubtitleBackground"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtView_SubjectTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginBottom="-1dp"
+            android:layout_weight="0.5"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="- Title -"
+            android:textColor="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/txtView_SubjectDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="- xx/xx/xxx -"
+            android:textColor="@color/colorAccent" />
+    </LinearLayout>
+
+</RelativeLayout>
