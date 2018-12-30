@@ -26,13 +26,15 @@ class Start_Activity : AppCompatActivity() {
         setupViewpager(Start_activityViewpager)
         Start_activityTabLayout.setupWithViewPager(Start_activityViewpager,true)
 
+        setupTabIcons()
+
         Start_activityViewpager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(p0: Int) {}
 
             override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {}
 
             override fun onPageSelected(p0: Int) {
-                when (fragmentNames.get(p0)) {
+                when (fragmentNames[p0]) {
                     "Timeline" -> Start_activityToolbar?.subtitle = "Timeline"
                     "Themes" -> Start_activityToolbar?.subtitle = "Themes"
                 }
@@ -49,5 +51,10 @@ class Start_Activity : AppCompatActivity() {
         fragmentNames.add("Themes")
 
         viewpager.adapter = EmotionsPagerAdapter(supportFragmentManager,fragments)
+    }
+
+    fun setupTabIcons() {
+        Start_activityTabLayout.getTabAt(0)!!.setIcon(R.drawable.baseline_timeline_24)
+        Start_activityTabLayout.getTabAt(1)!!.setIcon(R.drawable.baseline_people_24)
     }
 }

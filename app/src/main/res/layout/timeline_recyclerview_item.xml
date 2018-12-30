@@ -1,46 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/TimelineSubject_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="200dp"
+    android:layout_margin="5dp"
+    android:background="@color/colorPrimary">
 
     <ImageView
         android:id="@+id/imgView_SubjectImage"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:scaleType="fitXY"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="0.3"
         tools:srcCompat="@tools:sample/avatars" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_alignBottom="@+id/imgView_SubjectImage"
-        android:layout_alignParentBottom="false"
-        android:background="@color/colorSubtitleBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="85dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.7"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/txtView_SubjectTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginBottom="-1dp"
-            android:layout_weight="0.5"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="- Title -"
+            android:layout_weight="0.2"
+            android:text="TextView"
             android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/txtView_SubjectDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="- xx/xx/xxx -"
+            android:layout_weight="0.8"
+            android:text="TextView"
             android:textColor="@color/colorAccent" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

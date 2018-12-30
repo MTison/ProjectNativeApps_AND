@@ -16,6 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Activities.SubjectDetail_Activity"
+            android:parentActivityName=".Activities.Start_Activity"/>
+        <activity
+            android:name=".Activities.Subjects_Activity"
+            android:parentActivityName=".Activities.Start_Activity"/>
     </application>
 
 </manifest>
