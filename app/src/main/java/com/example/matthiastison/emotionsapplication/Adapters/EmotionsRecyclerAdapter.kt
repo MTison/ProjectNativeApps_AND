@@ -6,14 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.matthiastison.emotionsapplication.Activities.SubjectDetail_Activity
+import com.example.matthiastison.emotionsapplication.Activities.SubjectEdit_Activity
 import com.example.matthiastison.emotionsapplication.Activities.Subjects_Activity
 import com.example.matthiastison.emotionsapplication.Models.Item
+import com.example.matthiastison.emotionsapplication.Models.SubjectItem
 import com.example.matthiastison.emotionsapplication.Models.ThemeItem
 import com.example.matthiastison.emotionsapplication.Models.TimelineItem
 import com.example.matthiastison.emotionsapplication.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.subject_recyclerview_item.view.*
 import kotlinx.android.synthetic.main.theme_recyclerview_item.view.*
+import kotlinx.android.synthetic.main.timeline_recyclerview_item.view.*
 
 class EmotionsRecyclerAdapter(private val items: ArrayList<Item>, private val target: String): RecyclerView.Adapter<ViewHolder>() {
 
@@ -25,6 +28,7 @@ class EmotionsRecyclerAdapter(private val items: ArrayList<Item>, private val ta
         when(target) {
             "timeline" -> inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.timeline_recyclerview_item, parent,false)
             "themes" -> inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.theme_recyclerview_item, parent,false)
+            "subjects" -> inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.subject_recyclerview_item, parent,false)
         }
 
         return ViewHolder(inflatedView, target)
@@ -58,25 +62,32 @@ class ViewHolder(itemView: View, private val target: String) : RecyclerView.View
 
         when(target) {
             "timeline" -> {
-                val timelineItemDetailIntent = Intent(context, SubjectDetail_Activity::class.java)
-                timelineItemDetailIntent.putExtra(TIMELINE_ITEM_KEY, item)
-                context.startActivity(timelineItemDetailIntent)
+                val timelineSubjectDetailIntent = Intent(context, SubjectDetail_Activity::class.java)
+                timelineSubjectDetailIntent.putExtra(TIMELINE_ITEM_KEY, item)
+                context.startActivity(timelineSubjectDetailIntent)
             }
             "themes" -> {
                 val subjectsIntent = Intent(context, Subjects_Activity::class.java)
                 subjectsIntent.putExtra(THEME_ITEM_KEY, item)
                 context.startActivity(subjectsIntent)
             }
+            "subjects" -> {
+                val subjectEditIntent = Intent(context, SubjectEdit_Activity::class.java)
+                subjectEditIntent.putExtra(SUBJECT_ITEM_KEY, item)
+                context.startActivity(subjectEditIntent)
+            }
         }
     }
 
+    //TODO: make use of data binding instead
     fun bindItem(item: Item) {
         if(item is TimelineItem) {
             // add attributes of timelineItem to the fields in the itemView
             this.item = item
-            Picasso.with(view.context).load(item.imageRes).fit().into(view.imgView_SubjectImage)
-            view.txtView_SubjectDate.text = item.date
-            view.txtView_SubjectTitle.text = item.title
+            Picasso.with(view.context).load(item.imageRes).fit().into(view.imgView_TimelineSubjectImage)
+            view.txtView_TimelineSubjectDate.text = item.date
+            view.txtView_TimelineSubjectTitle.text = item.title
+            view.TimelineSubject_layout.setBackgroundResource(item.colorRes)
         }
         if(item is ThemeItem) {
             // add attributes of themeItem to the fields in the itemView
@@ -84,12 +95,20 @@ class ViewHolder(itemView: View, private val target: String) : RecyclerView.View
             view.txtView_ThemeTitle.text = item.title
             view.Theme_layout.setBackgroundResource(item.colorRes)
         }
+        if(item is SubjectItem) {
+            // add attributes of subjectItem to the fields in the itemView
+            this.item = item
+            Picasso.with(view.context).load(item.imageRes).fit().into(view.imgView_SubjectImage)
+            view.txtView_SubjectDate.text = item.date
+            view.Subject_layout.setBackgroundResource(item.colorRes)
+        }
     }
 
     //TODO: search meaning and use of companion objects
     companion object {
         private val TIMELINE_ITEM_KEY = "TIMELINE_ITEM"
         private val THEME_ITEM_KEY = "THEME_ITEM"
+        private val SUBJECT_ITEM_KEY = "SUBJECT_ITEM"
     }
 
 }

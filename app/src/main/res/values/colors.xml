@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#00701a</color>
     <color name="colorAccent">#fafafa</color>
     <color name="colorSubtitleBackground">#64000000</color>
+    <color name="themeColor1">#642b98d2</color>
+    <color name="themeColor2">#64d22b2e</color>
+    <color name="themeColor3">#64cfd22b</color>
+    <color name="themeColor4">#642bd271</color>
 </resources>

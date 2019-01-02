@@ -21,9 +21,9 @@ class SubjectDetail_Activity: AppCompatActivity() {
     }
 
     private fun makeDetails(item: TimelineItem) {
-        txtView_SubjectTitle.setText(item.title)
-        imgView_SubjectImage.setImageResource(item.imageRes)
-        txtView_SubjectDate.setText(item.date)
-        txtView_SubjectDescription.setText("Add description here")
+        txtView_SubjectDetailTitle.text = item.title
+        imgView_SubjectDetailImage.setImageResource(item.imageRes)
+        txtView_SubjectDetailDate.text = item.date
+        txtView_SubjectDetailDescription.text = "Add description here"
     }
 }

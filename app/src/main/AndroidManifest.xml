@@ -22,6 +22,9 @@
         <activity
             android:name=".Activities.Subjects_Activity"
             android:parentActivityName=".Activities.Start_Activity"/>
+        <activity
+            android:name=".Activities.SubjectEdit_Activity"
+            android:parentActivityName=".Activities.Subjects_Activity"/>
     </application>
 
 </manifest>

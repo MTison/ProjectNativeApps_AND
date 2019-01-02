@@ -13,6 +13,7 @@ import com.example.matthiastison.emotionsapplication.Models.Item
 import com.example.matthiastison.emotionsapplication.Models.ThemeItem
 import com.example.matthiastison.emotionsapplication.R
 import kotlinx.android.synthetic.main.fragment_theme.*
+import java.util.*
 
 class Theme_Fragment: Fragment() {
 
@@ -62,15 +63,16 @@ class Theme_Fragment: Fragment() {
     // TODO: get data from db instead of making dummy
     private fun createDummyData() {
         var tempItem: ThemeItem
+        var themeNamesList = Arrays.asList("WONEN","RELATIES","VRIJE TIJD","LEVEN")
 
-        // val resources = activity!!.applicationContext.resources
-        // val typedImageArray = resources.obtainTypedArray(R.array.images)
+        val resources = activity!!.applicationContext.resources
+        val typedColorArray = resources.obtainTypedArray(R.array.colors)
 
-        for(i in 0..5) {
-            tempItem = ThemeItem(i,"Title $i", R.color.colorPrimary)
+        for(i in 0..3) {
+            tempItem = ThemeItem(i,themeNamesList[i], typedColorArray.getResourceId(i, 0))
             themeItemsList.add(tempItem)
         }
         // make data ready for GC so it doesn't stay bound to "typedImageArray"
-        // typedImageArray.recycle()
+        typedColorArray.recycle()
     }
 }

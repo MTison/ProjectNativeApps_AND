@@ -72,9 +72,10 @@ class Timeline_Fragment: Fragment() {
 
         val resources = activity!!.applicationContext.resources
         val typedImageArray = resources.obtainTypedArray(R.array.images)
+        val typedColorArray = resources.obtainTypedArray(R.array.colors)
 
-        for(i in 0..5) {
-            tempItem = TimelineItem(i,"Title $i","Date $i", typedImageArray.getResourceId(i, 0), R.color.colorPrimary)
+        for(i in 0..3) {
+            tempItem = TimelineItem(i,"Title $i","Date $i",typedImageArray.getResourceId(i, 0),typedColorArray.getResourceId(i, 0))
             timelineItemsList.add(tempItem)
         }
         // make data ready for GC so it doesn't stay bound to "typedImageArray"

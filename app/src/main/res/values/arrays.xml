@@ -14,4 +14,10 @@
         <item>@drawable/y_u_no_guy</item>
         <item>@drawable/yao_ming</item>
     </array>
+    <array name="colors">
+        <item>@color/themeColor1</item>
+        <item>@color/themeColor2</item>
+        <item>@color/themeColor3</item>
+        <item>@color/themeColor4</item>
+    </array>
 </resources>
