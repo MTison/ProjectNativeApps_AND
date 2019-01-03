@@ -38,7 +38,7 @@ class Theme_Fragment: Fragment() {
                               savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_theme,container,false)
 
-        return v;
+        return v
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

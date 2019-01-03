@@ -99,6 +99,7 @@ class ViewHolder(itemView: View, private val target: String) : RecyclerView.View
             // add attributes of subjectItem to the fields in the itemView
             this.item = item
             Picasso.with(view.context).load(item.imageRes).fit().into(view.imgView_SubjectImage)
+            view.txtView_SubjectTitle.text = item.title
             view.txtView_SubjectDate.text = item.date
             view.Subject_layout.setBackgroundResource(item.colorRes)
         }

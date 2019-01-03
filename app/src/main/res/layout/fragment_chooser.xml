@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_ImageCapture"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="0.5"
+            android:background="@color/colorSubtitleBackground"
+            android:text="Foto maken met gsm camera"
+            android:textColor="@color/colorAccent" />
+
+        <Button
+            android:id="@+id/btn_ImageDownload"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_weight="0.5"
+            android:background="@color/colorSubtitleBackground"
+            android:text="Foto downloaden van extern platform"
+            android:textColor="@color/colorAccent" />
+    </LinearLayout>
+</RelativeLayout>
