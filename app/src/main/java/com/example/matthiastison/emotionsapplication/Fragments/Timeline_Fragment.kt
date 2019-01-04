@@ -1,5 +1,7 @@
 package com.example.matthiastison.emotionsapplication.Fragments
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,23 +10,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.matthiastison.emotionsapplication.Activities.Start_Activity
-import com.example.matthiastison.emotionsapplication.Adapters.EmotionsRecyclerAdapter
+import com.example.matthiastison.emotionsapplication.Adapters.TimelineRecyclerAdapter
+import com.example.matthiastison.emotionsapplication.Database.Entities.SubjectEntity
 import com.example.matthiastison.emotionsapplication.Models.Item
 import com.example.matthiastison.emotionsapplication.Models.TimelineItem
 import com.example.matthiastison.emotionsapplication.R
+import com.example.matthiastison.emotionsapplication.ViewModels.SubjectViewModel
 import kotlinx.android.synthetic.main.fragment_timeline.*
 
 class Timeline_Fragment: Fragment() {
 
     private lateinit var linearLayoutManager : LinearLayoutManager
-    private lateinit var adapter: EmotionsRecyclerAdapter
+    private lateinit var adapter: TimelineRecyclerAdapter
+    private lateinit var subjectViewModel: SubjectViewModel
 
     private var timelineItemsList: ArrayList<Item> = ArrayList()
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        createDummyData();
+        // createDummyData();
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,8 +51,13 @@ class Timeline_Fragment: Fragment() {
         linearLayoutManager = LinearLayoutManager(activity)
         Timeline_recyclerView.layoutManager = linearLayoutManager
 
-        adapter = EmotionsRecyclerAdapter(timelineItemsList, "timeline")
+        adapter = TimelineRecyclerAdapter()
         Timeline_recyclerView.adapter = adapter
+
+        subjectViewModel = ViewModelProviders.of(this).get(SubjectViewModel::class.java)
+        subjectViewModel.getAllSubjects().observe(this, Observer<ArrayList<SubjectEntity>> {
+            adapter.setItems(it!!)
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -61,9 +71,9 @@ class Timeline_Fragment: Fragment() {
     override fun onStart() {
         super.onStart()
 
-        if (timelineItemsList.isEmpty()) {
+        // if (timelineItemsList.isEmpty()) {
             // action when there are no timelineItems to be shown
-        }
+        // }
     }
 
     // TODO: get data from db instead of making dummy

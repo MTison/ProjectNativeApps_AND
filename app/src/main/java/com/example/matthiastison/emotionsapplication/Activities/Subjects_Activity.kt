@@ -1,5 +1,7 @@
 package com.example.matthiastison.emotionsapplication.Activities
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -9,19 +11,23 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import com.example.matthiastison.emotionsapplication.Adapters.EmotionsRecyclerAdapter
+import android.widget.Toast
+import com.example.matthiastison.emotionsapplication.Adapters.SubjectsRecyclerAdapter
+import com.example.matthiastison.emotionsapplication.Database.Entities.SubjectEntity
 import com.example.matthiastison.emotionsapplication.Models.Item
 import com.example.matthiastison.emotionsapplication.Models.SubjectItem
 import com.example.matthiastison.emotionsapplication.Models.ThemeItem
 import com.example.matthiastison.emotionsapplication.R
+import com.example.matthiastison.emotionsapplication.ViewModels.SubjectViewModel
 import kotlinx.android.synthetic.main.activity_subjects.*
 import com.google.gson.Gson
 
 class Subjects_Activity: AppCompatActivity() {
 
     private lateinit var gridLayoutManager: GridLayoutManager
-    private lateinit var adapter: EmotionsRecyclerAdapter
+    private lateinit var adapter: SubjectsRecyclerAdapter
     private lateinit var item : Item
+    private lateinit var subjectViewModel: SubjectViewModel
 
     private lateinit var prefs : SharedPreferences
     private lateinit var prefsEditor : SharedPreferences.Editor
@@ -34,20 +40,32 @@ class Subjects_Activity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_subjects)
 
-        createDummyData()
+        //createDummyData()
+        item = intent.getSerializableExtra("THEME_ITEM") as ThemeItem
 
-        initSharedPreferences()
-        setItem(prefs.getString(CURRENT_THEME, null))
-
-        Subjects_toolbar.title = item?.title
-        setSupportActionBar(Subjects_toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //initSharedPreferences()
+        //setItem(prefs.getString(CURRENT_THEME, null))
 
         gridLayoutManager = GridLayoutManager(this, 2)
         Subjects_recyclerView.layoutManager = gridLayoutManager
 
-        adapter = EmotionsRecyclerAdapter(subjectItemList, "subjects")
+        adapter = SubjectsRecyclerAdapter()
         Subjects_recyclerView.adapter = adapter
+
+        subjectViewModel = ViewModelProviders.of(this).get(SubjectViewModel::class.java)
+        subjectViewModel.getAllSubjects().observe(this, Observer<ArrayList<SubjectEntity>> {
+            Toast.makeText(this,"on changed", Toast.LENGTH_LONG)
+            adapter.setItems(it!!)
+        })
+
+        Subjects_toolbar.title = item.title
+        setSupportActionBar(Subjects_toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -62,7 +80,7 @@ class Subjects_Activity: AppCompatActivity() {
             android.R.id.home -> {
                 // respond to the action bar's Up/Home button and clear the sharedPreferences,
                 // so no duplicates are made after reCreating activity
-                prefsEditor.remove(CURRENT_THEME).commit()
+                // prefsEditor.remove(CURRENT_THEME).commit()
                 NavUtils.navigateUpFromSameTask(this)
                 return true
             }
@@ -91,7 +109,7 @@ class Subjects_Activity: AppCompatActivity() {
     }
 
     private fun initSharedPreferences() {
-        // initializing the sharedPerfs for the activity
+        // initializing the sharedPrefs for the activity
         prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefsEditor = prefs.edit()
     }

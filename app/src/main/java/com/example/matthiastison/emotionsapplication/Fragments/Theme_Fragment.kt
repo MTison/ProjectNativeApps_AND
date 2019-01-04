@@ -1,5 +1,7 @@
 package com.example.matthiastison.emotionsapplication.Fragments
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -7,25 +9,30 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.matthiastison.emotionsapplication.Activities.Start_Activity
-import com.example.matthiastison.emotionsapplication.Adapters.EmotionsRecyclerAdapter
+import com.example.matthiastison.emotionsapplication.Adapters.ThemesRecyclerAdapter
+import com.example.matthiastison.emotionsapplication.Database.Entities.ThemeEntity
 import com.example.matthiastison.emotionsapplication.Models.Item
 import com.example.matthiastison.emotionsapplication.Models.ThemeItem
 import com.example.matthiastison.emotionsapplication.R
+import com.example.matthiastison.emotionsapplication.ViewModels.ThemeViewModel
 import kotlinx.android.synthetic.main.fragment_theme.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 class Theme_Fragment: Fragment() {
 
     private lateinit var gridLayoutManager : GridLayoutManager
-    private lateinit var adapter: EmotionsRecyclerAdapter
+    private lateinit var adapter: ThemesRecyclerAdapter
+    private lateinit var themeViewModel: ThemeViewModel
 
     private var themeItemsList: ArrayList<Item> = ArrayList()
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        createDummyData()
+        //createDummyData()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +54,14 @@ class Theme_Fragment: Fragment() {
         gridLayoutManager = GridLayoutManager(activity, 2)
         Theme_recyclerView.layoutManager = gridLayoutManager
 
-        adapter = EmotionsRecyclerAdapter(themeItemsList, "themes")
+        adapter = ThemesRecyclerAdapter()
         Theme_recyclerView.adapter = adapter
+
+        themeViewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java)
+        themeViewModel.getAllThemes().observe(this, Observer<ArrayList<ThemeEntity>> {
+            Toast.makeText(activity,"changed", Toast.LENGTH_LONG).show()
+            adapter.setItems(it!!)
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

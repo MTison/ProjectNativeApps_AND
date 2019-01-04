@@ -22,9 +22,6 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import android.view.KeyEvent.KEYCODE_BACK
-
-
 
 class ImageCapture_Fragment : Fragment() {
 
