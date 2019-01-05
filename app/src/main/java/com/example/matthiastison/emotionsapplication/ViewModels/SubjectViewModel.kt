@@ -1,18 +1,22 @@
 package com.example.matthiastison.emotionsapplication.ViewModels
 
-
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.WorkerThread
+import com.example.matthiastison.emotionsapplication.App
 import com.example.matthiastison.emotionsapplication.Database.EmotionsAppRepository
 import com.example.matthiastison.emotionsapplication.Database.Entities.SubjectEntity
+import com.example.matthiastison.emotionsapplication.Database.Entities.ThemeEntity
+import javax.inject.Inject
 
-// androidViewModel automatically passes down the application context, it is needed to instantiate our db instance
-class SubjectViewModel(application: Application) : AndroidViewModel(application) {
+class SubjectViewModel : ViewModel() {
 
-    private val subjectRepository: EmotionsAppRepository = EmotionsAppRepository(application)
+    @Inject
+    lateinit var subjectRepository: EmotionsAppRepository
+
+    init {
+        App.component.inject(this)
+    }
 
     private val allSubjects : LiveData<ArrayList<SubjectEntity>> = subjectRepository.getAllSubjects
 
@@ -39,7 +43,12 @@ class SubjectViewModel(application: Application) : AndroidViewModel(application)
         return subjectRepository.getSubject(id)
     }
 
-    fun getSubjectsForTheme(themeid: Int) : LiveData<ArrayList<SubjectEntity>> {
+    fun getSubjectsForTheme(themeid: String) : LiveData<ArrayList<SubjectEntity>> {
         return subjectRepository.getSubjectsForTheme(themeid)
     }
+
+    fun getSubjectsOnTimeline() : LiveData<ArrayList<SubjectEntity>> {
+        return subjectRepository.getSubjectsOnTimeline()
+    }
+
 }

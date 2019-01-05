@@ -1,16 +1,21 @@
 package com.example.matthiastison.emotionsapplication.ViewModels
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.ViewModel
 import android.support.annotation.WorkerThread
+import com.example.matthiastison.emotionsapplication.App
 import com.example.matthiastison.emotionsapplication.Database.EmotionsAppRepository
 import com.example.matthiastison.emotionsapplication.Database.Entities.ThemeEntity
+import javax.inject.Inject
 
-// androidViewModel automatically passes down the application context, it is needed to instantiate our db instance
-class ThemeViewModel(application: Application) : AndroidViewModel(application) {
+class ThemeViewModel : ViewModel() {
 
-    private val themeRepository: EmotionsAppRepository = EmotionsAppRepository(application)
+    @Inject
+    lateinit var themeRepository: EmotionsAppRepository
+
+    init {
+        App.component.inject(this)
+    }
 
     private val allThemes: LiveData<ArrayList<ThemeEntity>> = themeRepository.getAllThemes
 
@@ -37,7 +42,7 @@ class ThemeViewModel(application: Application) : AndroidViewModel(application) {
         return themeRepository.getTheme(id)
     }
 
-    fun getThemeIdOnTitle(themeTitle: String): LiveData<Int> {
+    fun getThemeIdOnTitle(themeTitle: String): LiveData<String> {
         return themeRepository.getThemeIdOnTitle(themeTitle)
     }
 

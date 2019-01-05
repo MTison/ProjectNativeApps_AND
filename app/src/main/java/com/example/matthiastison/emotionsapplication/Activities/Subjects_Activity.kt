@@ -2,37 +2,26 @@ package com.example.matthiastison.emotionsapplication.Activities
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import com.example.matthiastison.emotionsapplication.Adapters.SubjectsRecyclerAdapter
-import com.example.matthiastison.emotionsapplication.Database.Entities.SubjectEntity
-import com.example.matthiastison.emotionsapplication.Models.Item
-import com.example.matthiastison.emotionsapplication.Models.SubjectItem
-import com.example.matthiastison.emotionsapplication.Models.ThemeItem
+import com.example.matthiastison.emotionsapplication.Database.Entities.ThemeEntity
 import com.example.matthiastison.emotionsapplication.R
 import com.example.matthiastison.emotionsapplication.ViewModels.SubjectViewModel
 import kotlinx.android.synthetic.main.activity_subjects.*
-import com.google.gson.Gson
 
 class Subjects_Activity: AppCompatActivity() {
 
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var adapter: SubjectsRecyclerAdapter
-    private lateinit var item : Item
+    private lateinit var item : ThemeEntity
     private lateinit var subjectViewModel: SubjectViewModel
-
-    private lateinit var prefs : SharedPreferences
-    private lateinit var prefsEditor : SharedPreferences.Editor
-
-    private var subjectItemList: ArrayList<Item> = ArrayList()
 
     // '?.' is safe asserted call on nullable receiver
     // '!!.' is non-null asserted call on nullable receiver
@@ -40,11 +29,8 @@ class Subjects_Activity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_subjects)
 
-        //createDummyData()
-        item = intent.getSerializableExtra("THEME_ITEM") as ThemeItem
-
-        //initSharedPreferences()
-        //setItem(prefs.getString(CURRENT_THEME, null))
+        item = intent.getParcelableExtra("THEME_ITEM")
+        subjectViewModel = ViewModelProviders.of(this).get(SubjectViewModel::class.java)
 
         gridLayoutManager = GridLayoutManager(this, 2)
         Subjects_recyclerView.layoutManager = gridLayoutManager
@@ -52,20 +38,26 @@ class Subjects_Activity: AppCompatActivity() {
         adapter = SubjectsRecyclerAdapter()
         Subjects_recyclerView.adapter = adapter
 
-        subjectViewModel = ViewModelProviders.of(this).get(SubjectViewModel::class.java)
-        subjectViewModel.getAllSubjects().observe(this, Observer<ArrayList<SubjectEntity>> {
-            Toast.makeText(this,"on changed", Toast.LENGTH_LONG)
-            adapter.setItems(it!!)
-        })
-
         Subjects_toolbar.title = item.title
         setSupportActionBar(Subjects_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onStart() {
+        super.onStart()
 
+        subjectViewModel.getSubjectsForTheme(item.id).observe(this, Observer { subjects ->
+            subjects?.let {
+                Toast.makeText(applicationContext,"reload subjects", Toast.LENGTH_LONG)
+                adapter.setItems(it)
+
+                if(adapter.itemCount == 0) {
+                    txtView_NoSubjects.visibility = View.VISIBLE
+                } else {
+                    txtView_NoSubjects.visibility = View.INVISIBLE
+                }
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -77,15 +69,9 @@ class Subjects_Activity: AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
-                // respond to the action bar's Up/Home button and clear the sharedPreferences,
-                // so no duplicates are made after reCreating activity
-                // prefsEditor.remove(CURRENT_THEME).commit()
-                NavUtils.navigateUpFromSameTask(this)
-                return true
-            }
             R.id.action_addImage -> {
                 val addImageIntent = Intent(this, AddImage_Activity::class.java)
+                addImageIntent.putExtra("THEME_ITEM", this.item)
                 this.startActivity(addImageIntent)
             }
             R.id.action_addVideo -> {
@@ -98,22 +84,22 @@ class Subjects_Activity: AppCompatActivity() {
     //TODO: when changing to landscape saving the state
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putSerializable(CURRENT_THEME, item)
+        // outState.putSerializable(CURRENT_THEME, item)
     }
     //TODO: when reCreating activity restoring the state
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
-        savedInstanceState?.let {
-            item = it.getSerializable(CURRENT_THEME) as ThemeItem
-        }
+        // savedInstanceState?.let {
+        //    item = it.getSerializable(CURRENT_THEME) as ThemeItem
+        // }
     }
 
-    private fun initSharedPreferences() {
-        // initializing the sharedPrefs for the activity
-        prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        prefsEditor = prefs.edit()
+    companion object {
+        private var CURRENT_THEME = "currentTheme"
+        private var PREFS_NAME = "sharedPreferences"
     }
-
+}
+/*
     private fun setItem(currentTheme: String?) {
         when(currentTheme == null) {
             true -> {
@@ -130,9 +116,7 @@ class Subjects_Activity: AppCompatActivity() {
         }
     }
 
-    // TODO: get data from db instead of making dummy
-    private fun createDummyData() {
-        var tempItem: SubjectItem
+
 
         val resources = applicationContext.resources
         val typedImageArray = resources.obtainTypedArray(R.array.images)
@@ -145,10 +129,4 @@ class Subjects_Activity: AppCompatActivity() {
         // make data ready for GC so it doesn't stay bound to "typedImageArray"
         typedImageArray.recycle()
         typedColorArray.recycle()
-    }
-
-    companion object {
-        private var CURRENT_THEME = "currentTheme"
-        private var PREFS_NAME = "sharedPreferences"
-    }
-}
+*/

@@ -27,16 +27,9 @@ class Theme_Fragment: Fragment() {
     private lateinit var adapter: ThemesRecyclerAdapter
     private lateinit var themeViewModel: ThemeViewModel
 
-    private var themeItemsList: ArrayList<Item> = ArrayList()
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        //createDummyData()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        themeViewModel = ViewModelProviders.of(activity!!).get(ThemeViewModel::class.java)
     }
 
     // '?.' is safe asserted call on nullable receiver
@@ -56,12 +49,18 @@ class Theme_Fragment: Fragment() {
 
         adapter = ThemesRecyclerAdapter()
         Theme_recyclerView.adapter = adapter
+    }
 
-        themeViewModel = ViewModelProviders.of(this).get(ThemeViewModel::class.java)
-        themeViewModel.getAllThemes().observe(this, Observer<ArrayList<ThemeEntity>> {
-            Toast.makeText(activity,"changed", Toast.LENGTH_LONG).show()
-            adapter.setItems(it!!)
+    override fun onStart() {
+        super.onStart()
+
+        themeViewModel.getAllThemes().observe(this, Observer { themes ->
+            themes?.let {
+                Toast.makeText(activity,"changed themes", Toast.LENGTH_LONG).show()
+                adapter.setItems(it)
+            }
         })
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -70,22 +69,5 @@ class Theme_Fragment: Fragment() {
         // casting 'Start_Activity' as the base activity in fragment
         // when the activity is done initializing itself
         activity as Start_Activity
-    }
-
-
-    // TODO: get data from db instead of making dummy
-    private fun createDummyData() {
-        var tempItem: ThemeItem
-        var themeNamesList = Arrays.asList("WONEN","RELATIES","VRIJE TIJD","LEVEN")
-
-        val resources = activity!!.applicationContext.resources
-        val typedColorArray = resources.obtainTypedArray(R.array.colors)
-
-        for(i in 0..3) {
-            tempItem = ThemeItem(i,themeNamesList[i], typedColorArray.getResourceId(i, 0))
-            themeItemsList.add(tempItem)
-        }
-        // make data ready for GC so it doesn't stay bound to "typedImageArray"
-        typedColorArray.recycle()
     }
 }

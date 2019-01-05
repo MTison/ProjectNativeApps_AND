@@ -1,6 +1,7 @@
 package com.example.matthiastison.emotionsapplication.Adapters
 
 import android.content.Intent
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import com.example.matthiastison.emotionsapplication.Activities.SubjectEdit_Activity
 import com.example.matthiastison.emotionsapplication.Database.Entities.SubjectEntity
 import com.example.matthiastison.emotionsapplication.R
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.subject_recyclerview_item.view.*
 
 class SubjectsRecyclerAdapter : RecyclerView.Adapter<SubjectsRecyclerAdapter.ViewHolder>() {
@@ -56,10 +58,16 @@ class SubjectsRecyclerAdapter : RecyclerView.Adapter<SubjectsRecyclerAdapter.Vie
         fun bindItem(item: SubjectEntity) {
             // add attributes of subjectItem to the fields in the itemView
             this.item = item
-            // Picasso.with(view.context).load(item.imageRes).fit().into(view.imgView_SubjectImage)
+            Picasso.with(view.context).load(Uri.parse(item.imageRes)).fit().into(view.imgView_SubjectImage)
             view.txtView_SubjectTitle.text = item.title
             view.txtView_SubjectDate.text = item.date
-            // view.Subject_layout.setBackgroundResource(item.colorRes)
+
+            when(item.theme_id){
+                "1" -> view.Subject_layout.setBackgroundResource(R.color.themeColor1)
+                "2" -> view.Subject_layout.setBackgroundResource(R.color.themeColor2)
+                "3" -> view.Subject_layout.setBackgroundResource(R.color.themeColor3)
+                "4" -> view.Subject_layout.setBackgroundResource(R.color.themeColor4)
+            }
         }
     }
 

@@ -1,10 +1,12 @@
 package com.example.matthiastison.emotionsapplication.Activities
 
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.example.matthiastison.emotionsapplication.Database.Entities.SubjectEntity
 import com.example.matthiastison.emotionsapplication.Models.TimelineItem
 import com.example.matthiastison.emotionsapplication.R
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_subjectdetail.*
 
 class SubjectDetail_Activity: AppCompatActivity() {
@@ -25,7 +27,7 @@ class SubjectDetail_Activity: AppCompatActivity() {
 
     private fun makeDetails(item: SubjectEntity) {
         txtView_SubjectDetailTitle.text = item.title
-        //imgView_SubjectDetailImage.setImageResource(item.imageRes)
+        Picasso.with(this).load(Uri.parse(item.imageRes)).fit().into(imgView_SubjectDetailImage)
         txtView_SubjectDetailDate.text = item.date
         txtView_SubjectDetailDescription.text = item.description
     }

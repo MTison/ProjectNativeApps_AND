@@ -6,7 +6,6 @@ import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 
 @Parcelize
 @Entity(tableName = "subject_table",
@@ -20,4 +19,7 @@ import java.util.*
                 onDelete = ForeignKey.CASCADE,
                 onUpdate = ForeignKey.CASCADE)
         ])
-data class SubjectEntity(var title : String?, var date : String?, var description : String?, var theme_id : Int?, @PrimaryKey val id : String) : Parcelable {}
+data class SubjectEntity(var title : String?, var date : String?,
+                         var description : String?, var imageRes: String?,
+                         var onTimeline: Int?, var theme_id : String?,
+                         @PrimaryKey var id : String) : Parcelable {}

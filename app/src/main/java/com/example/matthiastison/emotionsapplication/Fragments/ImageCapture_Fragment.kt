@@ -1,8 +1,10 @@
 package com.example.matthiastison.emotionsapplication.Fragments
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,10 +17,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.example.matthiastison.emotionsapplication.Database.Entities.SubjectEntity
+import com.example.matthiastison.emotionsapplication.Database.Entities.ThemeEntity
 import com.example.matthiastison.emotionsapplication.R
+import com.example.matthiastison.emotionsapplication.ViewModels.SubjectViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_imagecapture.*
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,9 +33,13 @@ import java.util.*
 class ImageCapture_Fragment : Fragment() {
 
     private lateinit var imageUri: Uri
+    private lateinit var subjectViewModel: SubjectViewModel
+    private lateinit var theme: ThemeEntity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        subjectViewModel = ViewModelProviders.of(activity!!).get(SubjectViewModel::class.java)
+        theme = arguments!!.getParcelable("THEME_ITEM")
     }
 
     // '?.' is safe asserted call on nullable receiver
@@ -51,15 +62,16 @@ class ImageCapture_Fragment : Fragment() {
         }
 
         btn_UploadImage.setOnClickListener {
-            // intent for taking an image with the provided camera
-            val uploadImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            // intent for uploading an image from the internal/external storage
+            val uploadImageIntent = Intent(Intent.ACTION_GET_CONTENT)
             uploadImageIntent.type = "image/*"
-            startActivityForResult(uploadImageIntent, UP_IMAGE)
+            startActivityForResult(Intent.createChooser(uploadImageIntent, "Select Picture"), UP_IMAGE)
             hideLayouts(true)
         }
 
         btn_SaveSubject.setOnClickListener {
-
+            saveSubject()
+            activity!!.supportFragmentManager.popBackStack()
         }
 
         btn_ClearAll.setOnClickListener {
@@ -77,19 +89,46 @@ class ImageCapture_Fragment : Fragment() {
             CAP_IMAGE -> {
                 when(resultCode) {
                     Activity.RESULT_OK -> Picasso.with(activity!!).load(imageUri).fit().into(newSubjectImage)
-                    Activity.RESULT_CANCELED -> hideLayouts(false)
+                    Activity.RESULT_CANCELED -> {
+                        hideLayouts(false)
+                        imageUri = Uri.parse("")
+                    }
                 }
             }
             UP_IMAGE -> {
                 when(resultCode) {
                     Activity.RESULT_OK -> {
-                        imageUri = data!!.data
-                        Picasso.with(activity!!).load(imageUri).fit().into(newSubjectImage)
+                        val bitmap = MediaStore.Images.Media.getBitmap(activity!!.contentResolver, data!!.data)
+                        imageUri = getImageUri(bitmap)
+
+                        if (imageUri.toString() != "")
+                            Picasso.with(activity!!).load(imageUri).fit().into(newSubjectImage)
+                        else
+                            Toast.makeText(activity!!,"No temp file made", Toast.LENGTH_LONG)
                     }
-                    Activity.RESULT_CANCELED -> hideLayouts(false)
+                    Activity.RESULT_CANCELED -> {
+                        hideLayouts(false)
+                        imageUri = Uri.parse("")
+                    }
                 }
             }
         }
+    }
+
+    private fun saveSubject() {
+        val subjectTitle = edtView_SubjectTitle.text.toString()
+        val subjectDate = edtView_SubjectDate.text.toString()
+        val subjectDescription = edtView_SubjectDescription.text.toString()
+        val imageRes = imageUri.toString()
+
+        if (subjectTitle.trim().isEmpty() || subjectDate.trim().isEmpty() ||
+                subjectDescription.trim().isEmpty() || imageRes == "") {
+            Toast.makeText(activity,"please provide a full subject",Toast.LENGTH_LONG).show()
+            return
+        }
+
+        subjectViewModel.insert(SubjectEntity(subjectTitle,subjectDate,subjectDescription,
+                imageRes, 0 , theme.id, UUID.randomUUID().toString()))
     }
 
     private fun checkForCompatibility (intent: Intent, requestCode: Int? = null) {
@@ -139,14 +178,36 @@ class ImageCapture_Fragment : Fragment() {
         }
     }
 
+    private fun getImageUri(inImage: Bitmap) : Uri {
+        // making a temporary file in environment directory to save the image chosen from storage
+        var tempFile: File? = null
+
+        try {
+            tempFile = createImageFile()
+        } catch (ex: IOException) {
+            Log.i("Temp file err", ex.localizedMessage)
+        }
+
+        if(tempFile != null) {
+            val outStream = FileOutputStream(tempFile)
+            inImage.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
+            outStream.close()
+
+            return FileProvider.getUriForFile(activity!!,
+                    "com.example.android.fileprovider", tempFile)
+        }
+
+        return Uri.parse("")
+    }
+
     @Throws(IOException::class)
     private fun createImageFile(): File {
-        //Making a unique filename with current date and time, creating collision-resistant file
+        // making a unique filename with current date and time, creating collision-resistant file
         val time = SimpleDateFormat("ddMMyyyy_HHmmss").format(Date())
         val fileName = "JPEG_" + time + "_"
 
         val fileDir = activity!!.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        //Creating the file for the picture in the fileDir, with fitting prefix and suffix
+        // creating the file for the picture in the fileDir, with fitting prefix and suffix
         val imageFile = File.createTempFile(fileName, ".jpg", fileDir)
 
         // photoPath = imageFile.absolutePath

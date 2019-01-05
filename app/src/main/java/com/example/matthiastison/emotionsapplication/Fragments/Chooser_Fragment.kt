@@ -37,9 +37,12 @@ class Chooser_Fragment : Fragment() {
             activity.supportActionBar?.title = "Foto toevoegen - Capture"
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
+            val imageCaptureFragment = ImageCapture_Fragment()
+            imageCaptureFragment.arguments = arguments
+
             activity.supportFragmentManager.
                     beginTransaction().
-                    replace(R.id.AddImage_layout,ImageCapture_Fragment())
+                    replace(R.id.AddImage_layout,imageCaptureFragment)
                     .addToBackStack(null)
                     .commit()
         }

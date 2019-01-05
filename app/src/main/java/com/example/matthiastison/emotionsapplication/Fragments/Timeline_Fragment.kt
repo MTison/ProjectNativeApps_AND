@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.matthiastison.emotionsapplication.Activities.Start_Activity
 import com.example.matthiastison.emotionsapplication.Adapters.TimelineRecyclerAdapter
 import com.example.matthiastison.emotionsapplication.Database.Entities.SubjectEntity
@@ -24,16 +25,9 @@ class Timeline_Fragment: Fragment() {
     private lateinit var adapter: TimelineRecyclerAdapter
     private lateinit var subjectViewModel: SubjectViewModel
 
-    private var timelineItemsList: ArrayList<Item> = ArrayList()
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        // createDummyData();
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        subjectViewModel = ViewModelProviders.of(activity!!).get(SubjectViewModel::class.java)
     }
 
     // '?.' is safe asserted call on nullable receiver
@@ -53,11 +47,6 @@ class Timeline_Fragment: Fragment() {
 
         adapter = TimelineRecyclerAdapter()
         Timeline_recyclerView.adapter = adapter
-
-        subjectViewModel = ViewModelProviders.of(this).get(SubjectViewModel::class.java)
-        subjectViewModel.getAllSubjects().observe(this, Observer<ArrayList<SubjectEntity>> {
-            adapter.setItems(it!!)
-        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -71,25 +60,17 @@ class Timeline_Fragment: Fragment() {
     override fun onStart() {
         super.onStart()
 
-        // if (timelineItemsList.isEmpty()) {
-            // action when there are no timelineItems to be shown
-        // }
+        subjectViewModel.getSubjectsOnTimeline().observe(this, Observer { subjects ->
+            subjects?.let {
+                Toast.makeText(activity,"on changed", Toast.LENGTH_LONG)
+                adapter.setItems(it)
+
+                if(adapter.itemCount == 0) {
+                    txtView_NoTimelineSubjects.visibility = View.VISIBLE
+                } else {
+                    txtView_NoTimelineSubjects.visibility = View.INVISIBLE
+                }
+            }
+        })
     }
-
-    // TODO: get data from db instead of making dummy
-    private fun createDummyData() {
-        var tempItem: TimelineItem
-
-        val resources = activity!!.applicationContext.resources
-        val typedImageArray = resources.obtainTypedArray(R.array.images)
-        val typedColorArray = resources.obtainTypedArray(R.array.colors)
-
-        for(i in 0..3) {
-            tempItem = TimelineItem(i,"Title $i","Date $i",typedImageArray.getResourceId(i, 0),typedColorArray.getResourceId(i, 0))
-            timelineItemsList.add(tempItem)
-        }
-        // make data ready for GC so it doesn't stay bound to "typedImageArray"
-        typedImageArray.recycle();
-    }
-
 }

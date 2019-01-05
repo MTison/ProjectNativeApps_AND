@@ -8,9 +8,6 @@ import com.example.matthiastison.emotionsapplication.Database.Entities.ThemeEnti
 interface ThemeDao {
 
     @Insert
-    fun insertData(data: List<ThemeEntity>)
-
-    @Insert
     fun insert(theme: ThemeEntity)
 
     @Update
@@ -27,6 +24,6 @@ interface ThemeDao {
     fun getTheme(themeId: Int) : LiveData<ThemeEntity>
 
     @Query("SELECT id FROM theme_table WHERE title = :themeTitle")
-    fun getThemeIdOnTitle(themeTitle: String) : LiveData<Int>
+    fun getThemeIdOnTitle(themeTitle: String) : LiveData<String>
 
 }

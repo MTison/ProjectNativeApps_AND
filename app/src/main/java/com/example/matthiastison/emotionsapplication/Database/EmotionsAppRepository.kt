@@ -1,28 +1,16 @@
 package com.example.matthiastison.emotionsapplication.Database
 
-import android.app.Application
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Transformations
 import android.support.annotation.WorkerThread
 import com.example.matthiastison.emotionsapplication.Database.DAO.SubjectDao
 import com.example.matthiastison.emotionsapplication.Database.DAO.ThemeDao
 import com.example.matthiastison.emotionsapplication.Database.Entities.SubjectEntity
 import com.example.matthiastison.emotionsapplication.Database.Entities.ThemeEntity
-import java.util.*
+import org.jetbrains.anko.doAsync
+import kotlin.collections.ArrayList
 
-class EmotionsAppRepository(application: Application) {
+class EmotionsAppRepository(private val subjectDao: SubjectDao, private val themeDao: ThemeDao) {
 
-    private val emotionsDb  : EmotionsAppDb = EmotionsAppDb.getInstance(application)
-
-    private val subjectDao : SubjectDao
-    private val themeDao : ThemeDao
-
-    init {
-        subjectDao = emotionsDb.subjectDao()
-        themeDao = emotionsDb.themeDao()
-    }
-
-    val themes = themeDao.getAllThemes()
     val getAllSubjects : LiveData<ArrayList<SubjectEntity>> = subjectDao.getAllSubjects() as LiveData<ArrayList<SubjectEntity>>
     val getAllThemes : LiveData<ArrayList<ThemeEntity>> = themeDao.getAllThemes() as LiveData<ArrayList<ThemeEntity>>
 
@@ -31,29 +19,35 @@ class EmotionsAppRepository(application: Application) {
 
     @WorkerThread // run DB call asynchronously when writing to DB, to avoid blocking main thread
     fun insertSubject(subjectEntity: SubjectEntity) {
-        subjectDao.insert(subjectEntity)
+        doAsync {
+            subjectDao.insert(subjectEntity)
+        }
     }
 
     @WorkerThread
     fun updateSubject(subjectEntity: SubjectEntity) {
-        subjectDao.update(subjectEntity)
+        doAsync {
+            subjectDao.update(subjectEntity)
+        }
     }
 
     @WorkerThread
     fun deleteSubject(subjectEntity: SubjectEntity) {
-        subjectDao.delete(subjectEntity)
+        doAsync {
+            subjectDao.delete(subjectEntity)
+        }
     }
 
     fun getSubject(id: String) : LiveData<SubjectEntity> {
         return subjectDao.getSubject(id)
     }
 
-    fun getSubjectsForTheme(themeid: Int) : LiveData<ArrayList<SubjectEntity>> {
-        val themeWithSubjects = subjectDao.getSubjectsForTheme(themeid)
+    fun getSubjectsForTheme(themeid: String) : LiveData<ArrayList<SubjectEntity>> {
+        return subjectDao.getSubjectsForTheme(themeid) as LiveData<ArrayList<SubjectEntity>>
+    }
 
-        return Transformations.map(themeWithSubjects) {
-            it.subjects as ArrayList<SubjectEntity>
-        }
+    fun getSubjectsOnTimeline() : LiveData<ArrayList<SubjectEntity>> {
+        return subjectDao.getSubjectsOnTimeline() as LiveData<ArrayList<SubjectEntity>>
     }
 
     // THEMES CRUD CALLS
@@ -61,24 +55,30 @@ class EmotionsAppRepository(application: Application) {
 
     @WorkerThread
     fun insertTheme(themeEntity: ThemeEntity) {
-        themeDao.insert(themeEntity)
+        doAsync {
+            themeDao.insert(themeEntity)
+        }
     }
 
     @WorkerThread
     fun updateTheme(themeEntity: ThemeEntity) {
-        themeDao.update(themeEntity)
+        doAsync {
+            themeDao.update(themeEntity)
+        }
     }
 
     @WorkerThread
     fun deleteTheme(themeEntity: ThemeEntity) {
-        themeDao.delete(themeEntity)
+        doAsync {
+            themeDao.delete(themeEntity)
+        }
     }
 
     fun getTheme(id: Int) : LiveData<ThemeEntity> {
         return themeDao.getTheme(id)
     }
 
-    fun getThemeIdOnTitle(title: String) : LiveData<Int> {
+    fun getThemeIdOnTitle(title: String) : LiveData<String> {
         return themeDao.getThemeIdOnTitle(title)
     }
 
