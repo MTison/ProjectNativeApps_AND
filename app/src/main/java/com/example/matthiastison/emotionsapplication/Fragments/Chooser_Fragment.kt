@@ -48,7 +48,17 @@ class Chooser_Fragment : Fragment() {
         }
 
         btn_ImageDownload.setOnClickListener {
-            //TODO: download image through splashphoto API
+            activity.supportActionBar?.title = "Foto toevoegen - Download"
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
+            val imageDownloadFragment = ImageDownload_Fragment()
+            imageDownloadFragment.arguments = arguments
+
+            activity.supportFragmentManager.
+                    beginTransaction().
+                    replace(R.id.AddImage_layout,imageDownloadFragment)
+                    .addToBackStack(null)
+                    .commit()
         }
     }
 

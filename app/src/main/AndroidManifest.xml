@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.matthiastison.emotionsapplication">
 
-    <uses-feature android:name="android.hardware.camera.any" android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="true" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -18,7 +20,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.android.fileprovider"
@@ -38,17 +39,19 @@
         </activity>
         <activity
             android:name=".Activities.SubjectDetail_Activity"
-            android:parentActivityName=".Activities.Start_Activity"/>
+            android:parentActivityName=".Activities.Start_Activity" />
         <activity
             android:name=".Activities.Subjects_Activity"
             android:launchMode="singleTop"
-            android:parentActivityName=".Activities.Start_Activity"/>
+            android:parentActivityName=".Activities.Start_Activity" />
         <activity
             android:name=".Activities.SubjectEdit_Activity"
-            android:parentActivityName=".Activities.Subjects_Activity"/>
+            android:parentActivityName=".Activities.Subjects_Activity" />
         <activity
             android:name=".Activities.AddImage_Activity"
-            android:parentActivityName=".Activities.Subjects_Activity"/>
+            android:parentActivityName=".Activities.Subjects_Activity" />
+        <activity
+            android:name=".Activities.AddImageUnsplash_Activity"/>
     </application>
 
 </manifest>

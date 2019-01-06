@@ -15,7 +15,7 @@ class SubjectViewModel : ViewModel() {
     lateinit var subjectRepository: EmotionsAppRepository
 
     init {
-        App.component.inject(this)
+        App.dbComponent.inject(this)
     }
 
     private val allSubjects : LiveData<ArrayList<SubjectEntity>> = subjectRepository.getAllSubjects

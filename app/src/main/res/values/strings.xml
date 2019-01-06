@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EmotionsApplication</string>
+    <string name="base_url">https://api.unsplash.com/</string>
+    <string name="access_key_api">ceec069bd542cc4562654d1dd4f0e5f06633fb753031c97cc221439dc0e3b927</string>
 </resources>

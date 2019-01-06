@@ -30,6 +30,10 @@ class TimelineRecyclerAdapter: RecyclerView.Adapter<TimelineRecyclerAdapter.View
         notifyDataSetChanged()
     }
 
+    fun getItemAt(pos: Int): SubjectEntity {
+        return subjectItems[pos]
+    }
+
     // bind each item to a viewHolder and recycle them throughout scrolling
     override fun onBindViewHolder(viewHolder: ViewHolder, pos: Int) {
         viewHolder.bindItem(subjectItems[pos])

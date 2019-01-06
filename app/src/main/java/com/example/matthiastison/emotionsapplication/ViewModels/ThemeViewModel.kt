@@ -14,7 +14,7 @@ class ThemeViewModel : ViewModel() {
     lateinit var themeRepository: EmotionsAppRepository
 
     init {
-        App.component.inject(this)
+        App.dbComponent.inject(this)
     }
 
     private val allThemes: LiveData<ArrayList<ThemeEntity>> = themeRepository.getAllThemes

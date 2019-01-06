@@ -2,10 +2,12 @@ package com.example.matthiastison.emotionsapplication.Fragments
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +15,10 @@ import android.widget.Toast
 import com.example.matthiastison.emotionsapplication.Activities.Start_Activity
 import com.example.matthiastison.emotionsapplication.Adapters.TimelineRecyclerAdapter
 import com.example.matthiastison.emotionsapplication.Database.Entities.SubjectEntity
-import com.example.matthiastison.emotionsapplication.Models.Item
-import com.example.matthiastison.emotionsapplication.Models.TimelineItem
 import com.example.matthiastison.emotionsapplication.R
 import com.example.matthiastison.emotionsapplication.ViewModels.SubjectViewModel
 import kotlinx.android.synthetic.main.fragment_timeline.*
+
 
 class Timeline_Fragment: Fragment() {
 
@@ -47,6 +48,42 @@ class Timeline_Fragment: Fragment() {
 
         adapter = TimelineRecyclerAdapter()
         Timeline_recyclerView.adapter = adapter
+
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            override fun onMove(p0: RecyclerView, p1: RecyclerView.ViewHolder, p2: RecyclerView.ViewHolder): Boolean {
+                TODO("not implemented")
+            }
+
+            override fun onSwiped(holder: RecyclerView.ViewHolder, direction: Int) {
+                //Building alert asking user to delete subject from timeline
+                val builder = AlertDialog.Builder(activity!!)
+
+                builder.setTitle("Verwijderen")
+                builder.setMessage("Onderwerp verwijderen van tijdlijn?")
+
+                builder.setPositiveButton("Ja") { _, _ ->
+                    val subject = adapter.getItemAt(holder.adapterPosition)
+                    subject.onTimeline = 0
+                    subjectViewModel.update(subject)
+                }
+
+                builder.setNegativeButton("Nee") { dialog, _ ->
+                    adapter.notifyDataSetChanged()
+                    dialog.dismiss()
+                }
+
+                val dialog: AlertDialog = builder.create()
+
+                dialog.setOnShowListener {
+                    val txtColor = resources.getColor(R.color.colorPrimary)
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(txtColor)
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(txtColor)
+                }
+
+                dialog.show()
+            }
+
+        }).attachToRecyclerView(Timeline_recyclerView)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -62,7 +99,6 @@ class Timeline_Fragment: Fragment() {
 
         subjectViewModel.getSubjectsOnTimeline().observe(this, Observer { subjects ->
             subjects?.let {
-                Toast.makeText(activity,"on changed", Toast.LENGTH_LONG)
                 adapter.setItems(it)
 
                 if(adapter.itemCount == 0) {

@@ -1,21 +1,24 @@
 package com.example.matthiastison.emotionsapplication
 
 import android.app.Application
-import com.example.matthiastison.emotionsapplication.Injection.DaggerDatabaseComponent
-import com.example.matthiastison.emotionsapplication.Injection.DatabaseComponent
-import com.example.matthiastison.emotionsapplication.Injection.DatabaseModule
+import com.example.matthiastison.emotionsapplication.Injection.*
 
 class App : Application() {
 
     companion object {
-        lateinit var component : DatabaseComponent
+        lateinit var dbComponent : DatabaseComponent
+        lateinit var vmComponent : ViewModelComponent
     }
 
     override fun onCreate() {
         super.onCreate()
-        component = DaggerDatabaseComponent
+        dbComponent = DaggerDatabaseComponent
                 .builder()
                 .databaseModule(DatabaseModule(this))
+                .build()
+        vmComponent = DaggerViewModelComponent
+                .builder()
+                .networkModule(NetworkModule)
                 .build()
     }
 

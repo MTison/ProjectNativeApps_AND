@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin : 'org.jetbrains.dokka-android'
+apply plugin: 'org.jetbrains.dokka-android'
 
 apply plugin: 'kotlin-kapt'
 
@@ -75,6 +75,10 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:$versions.rx"
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
     implementation "com.squareup.moshi:moshi-kotlin:$versions.moshi"
+
+    //OkHttp
+    implementation "com.squareup.okhttp3:okhttp:$versions.okHttp"
+    implementation "com.squareup.okhttp3:logging-interceptor:$versions.okHttp"
 
     // Adds libraries defining annotations to only the
     // compile classpath

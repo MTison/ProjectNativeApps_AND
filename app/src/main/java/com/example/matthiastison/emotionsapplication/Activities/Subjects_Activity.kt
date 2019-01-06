@@ -48,7 +48,7 @@ class Subjects_Activity: AppCompatActivity() {
 
         subjectViewModel.getSubjectsForTheme(item.id).observe(this, Observer { subjects ->
             subjects?.let {
-                Toast.makeText(applicationContext,"reload subjects", Toast.LENGTH_LONG)
+                Toast.makeText(this,"Loading subjects", Toast.LENGTH_SHORT).show()
                 adapter.setItems(it)
 
                 if(adapter.itemCount == 0) {

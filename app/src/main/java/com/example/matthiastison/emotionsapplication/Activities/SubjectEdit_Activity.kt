@@ -1,19 +1,22 @@
 package com.example.matthiastison.emotionsapplication.Activities
 
-import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.example.matthiastison.emotionsapplication.Database.Entities.SubjectEntity
-import com.example.matthiastison.emotionsapplication.Models.SubjectItem
 import com.example.matthiastison.emotionsapplication.R
 import com.example.matthiastison.emotionsapplication.ViewModels.SubjectViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_subjectedit.*
+import android.support.v4.os.HandlerCompat.postDelayed
+
+
 
 class SubjectEdit_Activity : AppCompatActivity() {
 
@@ -95,13 +98,15 @@ class SubjectEdit_Activity : AppCompatActivity() {
             return
         }
 
-        val resultIntent = intent
-        resultIntent.putExtra("EXTRA_EDITED_TITLE",subjectTitle)
-        resultIntent.putExtra("EXTRA_EDITED_DATE",subjectDate)
-        resultIntent.putExtra("EXTRA_EDITED_DESCRIPTION",subjectDescription)
+        item.title = subjectTitle
+        item.date = subjectDate
+        item.description = subjectDescription
+        subjectViewModel.update(item)
 
-        setResult(Activity.RESULT_OK, intent)
-        finish()
+        Toast.makeText(this,"Item saved!", Toast.LENGTH_SHORT).show()
+        // creating handler to delay the finishing of the activity until after the toast, so the activity can finish afterwards
+        Handler().postDelayed({
+            this@SubjectEdit_Activity.finish()}, 1500)
     }
 
     companion object {
