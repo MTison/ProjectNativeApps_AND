@@ -18,7 +18,6 @@ class SubjectsRecyclerAdapter : RecyclerView.Adapter<SubjectsRecyclerAdapter.Vie
 
     // inflate the view through the parent's inflater and pass it to the viewHolder
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): ViewHolder {
-        // initializing local variable
         var inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.subject_recyclerview_item, parent,false)
         return ViewHolder(inflatedView)
     }
@@ -54,7 +53,6 @@ class SubjectsRecyclerAdapter : RecyclerView.Adapter<SubjectsRecyclerAdapter.Vie
             itemView.context.startActivity(subjectEditIntent)
         }
 
-        //TODO: make use of data binding instead
         fun bindItem(item: SubjectEntity) {
             // add attributes of subjectItem to the fields in the itemView
             this.item = item
@@ -71,7 +69,6 @@ class SubjectsRecyclerAdapter : RecyclerView.Adapter<SubjectsRecyclerAdapter.Vie
         }
     }
 
-    //TODO: search meaning and use of companion objects
     companion object {
         private val SUBJECT_ITEM_KEY = "SUBJECT_ITEM"
     }

@@ -12,5 +12,5 @@ data class Unsplash(@Json(name = "id") val id: String = "",
         @Json(name = "height") val height: Long = 0L,
         @Json(name = "description") val description: String? = "",
         @Json(name = "urls") val urls: Urls? = null
-) : Parcelable {}
+) : Parcelable
 

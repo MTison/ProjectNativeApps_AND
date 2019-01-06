@@ -47,6 +47,7 @@ class Theme_Fragment: Fragment() {
     override fun onStart() {
         super.onStart()
 
+        // get all the themes that are preloaded in the db
         themeViewModel.getAllThemes().observe(this, Observer { themes ->
             themes?.let {
                 adapter.setItems(it)

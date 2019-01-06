@@ -58,7 +58,6 @@ class TimelineRecyclerAdapter: RecyclerView.Adapter<TimelineRecyclerAdapter.View
             itemView.context.startActivity(timelineSubjectDetailIntent)
         }
 
-        //TODO: make use of data binding instead
         fun bindItem(item: SubjectEntity) {
             // add attributes of subjectItem to the fields in the itemView
             this.item = item
@@ -75,7 +74,6 @@ class TimelineRecyclerAdapter: RecyclerView.Adapter<TimelineRecyclerAdapter.View
         }
     }
 
-    //TODO: search meaning and use of companion objects
     companion object {
         private val TIMELINE_ITEM_KEY = "TIMELINE_ITEM"
     }

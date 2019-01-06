@@ -46,11 +46,13 @@ class Subjects_Activity: AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
+        // get the subjects for the specific theme from the db and add them to the recyclerView
         subjectViewModel.getSubjectsForTheme(item.id).observe(this, Observer { subjects ->
             subjects?.let {
                 Toast.makeText(this,"Loading subjects", Toast.LENGTH_SHORT).show()
                 adapter.setItems(it)
 
+                // when no items are found in the adapter show message
                 if(adapter.itemCount == 0) {
                     txtView_NoSubjects.visibility = View.VISIBLE
                 } else {
@@ -74,59 +76,7 @@ class Subjects_Activity: AppCompatActivity() {
                 addImageIntent.putExtra("THEME_ITEM", this.item)
                 this.startActivity(addImageIntent)
             }
-            R.id.action_addVideo -> {
-
-            }
         }
         return super.onOptionsItemSelected(item)
     }
-
-    //TODO: when changing to landscape saving the state
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        // outState.putSerializable(CURRENT_THEME, item)
-    }
-    //TODO: when reCreating activity restoring the state
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-        // savedInstanceState?.let {
-        //    item = it.getSerializable(CURRENT_THEME) as ThemeItem
-        // }
-    }
-
-    companion object {
-        private var CURRENT_THEME = "currentTheme"
-        private var PREFS_NAME = "sharedPreferences"
-    }
 }
-/*
-    private fun setItem(currentTheme: String?) {
-        when(currentTheme == null) {
-            true -> {
-                // get theme from intent when no current theme is specified and add it to the sharedPreferences
-                item = intent.getSerializableExtra("THEME_ITEM") as ThemeItem
-                val jsonItem = Gson().toJson(item)
-                prefsEditor.putString(CURRENT_THEME, jsonItem).commit()
-            }
-            false -> {
-                // when there was already a theme, get it from the sharedPreferences
-                val prefsItem = Gson().fromJson<ThemeItem>(currentTheme, ThemeItem::class.java!!)
-                item = prefsItem
-            }
-        }
-    }
-
-
-
-        val resources = applicationContext.resources
-        val typedImageArray = resources.obtainTypedArray(R.array.images)
-        val typedColorArray = resources.obtainTypedArray(R.array.colors)
-
-        for(i in 0..3) {
-            tempItem = SubjectItem(i,"Title $i","Date $i",typedImageArray.getResourceId(i, 0),typedColorArray.getResourceId(i, 0))
-            subjectItemList.add(tempItem)
-        }
-        // make data ready for GC so it doesn't stay bound to "typedImageArray"
-        typedImageArray.recycle()
-        typedColorArray.recycle()
-*/

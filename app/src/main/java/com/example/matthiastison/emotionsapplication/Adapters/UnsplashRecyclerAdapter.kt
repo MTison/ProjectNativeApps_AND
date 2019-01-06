@@ -60,7 +60,6 @@ class UnsplashRecyclerAdapter : RecyclerView.Adapter<UnsplashRecyclerAdapter.Vie
             itemView.context.startActivity(addUnsplashIntent)
         }
 
-        //TODO: make use of data binding instead
         fun bindItem(item: Unsplash) {
             // add attributes of unsplashItem to the fields in the itemView
             this.item = item

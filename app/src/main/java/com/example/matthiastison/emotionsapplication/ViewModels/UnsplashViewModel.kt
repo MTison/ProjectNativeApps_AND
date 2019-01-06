@@ -14,11 +14,9 @@ import javax.inject.Inject
 
 class UnsplashViewModel : ViewModel() {
 
-    // Indicates whether the loading view should be displayed.
-    val loadingVisibility: MutableLiveData<Boolean> = MutableLiveData()
     private val unsplashData = MutableLiveData<ArrayList<Unsplash>>()
-    // Represents a disposable resources
-    private var subscription: Disposable
+    // Represents a disposable resource
+    private lateinit var subscription: Disposable
 
     @Inject
     // The instance of the UnsplashApi class to get back the results of the API
@@ -26,11 +24,13 @@ class UnsplashViewModel : ViewModel() {
 
     init {
         App.vmComponent.inject(this)
+    }
 
-        subscription = unsplashApi.getPhotos("Cats")
-                //we tell it to fetch the data on background by
+    fun requestPhotosOnQuery(searchQuery: String): MutableLiveData<ArrayList<Unsplash>> {
+        subscription = unsplashApi.getPhotos(searchQuery)
+                // we tell it to fetch the data on background by
                 .subscribeOn(Schedulers.io())
-                //we like the fetched data to be displayed on the MainTread (UI)
+                // we like the fetched data to be displayed on the main UI Thread
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { onRetrieveUnsplashStart() }
                 .doOnTerminate { onRetrieveUnsplashFinish() }
@@ -38,11 +38,11 @@ class UnsplashViewModel : ViewModel() {
                         { result -> onRetrieveUnsplashSuccess(result) },
                         { error -> onRetrieveUnsplashError(error) }
                 )
+
+        return unsplashData
     }
 
     private fun onRetrieveUnsplashError(error: Throwable) {
-        //Currently requests fail silently, which isn't great for the user.
-        //It would be better to show a Toast, or maybe make a TextView visible with the error message.
         Logger.e(error.message!!)
     }
 
@@ -53,21 +53,15 @@ class UnsplashViewModel : ViewModel() {
 
     private fun onRetrieveUnsplashFinish() {
         Logger.i("Finished retrieving UNSPLASH info")
-        loadingVisibility.value = false
     }
 
     private fun onRetrieveUnsplashStart() {
         Logger.i("Started retrieving UNSPLASH info")
-        loadingVisibility.value = true
     }
 
     override fun onCleared() {
         super.onCleared()
         subscription.dispose()
-    }
-
-    fun getRawUnsplash(): MutableLiveData<ArrayList<Unsplash>> {
-        return unsplashData
     }
 
 }

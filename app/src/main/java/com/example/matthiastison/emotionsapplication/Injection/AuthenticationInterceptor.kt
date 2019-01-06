@@ -4,6 +4,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 
+// separate class for intercepting api calls and adding the proper authorization header
 class AuthenticationInterceptor : Interceptor {
     private var defaultHeaders: Map<String, String>? = null
 

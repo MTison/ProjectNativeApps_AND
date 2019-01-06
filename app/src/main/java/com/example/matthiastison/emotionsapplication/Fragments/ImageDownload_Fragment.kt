@@ -6,6 +6,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import com.example.matthiastison.emotionsapplication.Adapters.UnsplashRecyclerAd
 import com.example.matthiastison.emotionsapplication.Database.Entities.ThemeEntity
 import com.example.matthiastison.emotionsapplication.R
 import com.example.matthiastison.emotionsapplication.ViewModels.UnsplashViewModel
+import com.pawegio.kandroid.textWatcher
 import kotlinx.android.synthetic.main.fragment_imagedownload.*
 
 class ImageDownload_Fragment : Fragment() {
@@ -20,11 +23,13 @@ class ImageDownload_Fragment : Fragment() {
     private lateinit var gridLayoutManager : GridLayoutManager
     private lateinit var adapter: UnsplashRecyclerAdapter
     private lateinit var unsplashViewModel: UnsplashViewModel
-    lateinit var theme: ThemeEntity
+    private lateinit var theme: ThemeEntity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         unsplashViewModel = ViewModelProviders.of(activity!!).get(UnsplashViewModel::class.java)
+
+        // get the current theme through the arguments given to the fragment
         theme = arguments!!.getParcelable("THEME_ITEM")
     }
 
@@ -50,14 +55,17 @@ class ImageDownload_Fragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        unsplashViewModel.getRawUnsplash().observe(this, Observer { themes ->
-            themes?.let {
-                val items = it
-                adapter.setItems(it)
+        // query the search request to the server when the user is typing in the input field
+        edtText_SearchQuery.textWatcher {
+            afterTextChanged {
+                unsplashViewModel.requestPhotosOnQuery(it.toString()).observe(activity!!, Observer { themes ->
+                    themes?.let {
+                        adapter.setItems(it)
+                    }
+                })
             }
-        })
+        }
 
         adapter.setTheme(theme)
     }
-
 }

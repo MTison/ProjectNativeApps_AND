@@ -3,6 +3,7 @@ package com.example.matthiastison.emotionsapplication
 import android.app.Application
 import com.example.matthiastison.emotionsapplication.Injection.*
 
+// make dagger components for injection of the necessary dependencies
 class App : Application() {
 
     companion object {

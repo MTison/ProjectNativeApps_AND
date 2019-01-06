@@ -9,6 +9,7 @@ import com.example.matthiastison.emotionsapplication.Database.Entities.ThemeEnti
 import org.jetbrains.anko.doAsync
 import kotlin.collections.ArrayList
 
+// class that serves as layer between the db and the viewModels, so they have no responsibilities to the db
 class EmotionsAppRepository(private val subjectDao: SubjectDao, private val themeDao: ThemeDao) {
 
     val getAllSubjects : LiveData<ArrayList<SubjectEntity>> = subjectDao.getAllSubjects() as LiveData<ArrayList<SubjectEntity>>

@@ -12,10 +12,6 @@ import android.support.v7.app.AppCompatActivity
 
 class Chooser_Fragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     // '?.' is safe asserted call on nullable receiver
     // '!!.' is non-null asserted call on nullable receiver
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -68,6 +64,12 @@ class Chooser_Fragment : Fragment() {
         // casting 'AddImage_Activity' as the base activity in fragment
         // when the activity is done initializing itself
         activity as AddImage_Activity
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        btn_ImageCapture.setOnClickListener(null)
+        btn_ImageDownload.setOnClickListener(null)
     }
 
 }

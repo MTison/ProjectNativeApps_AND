@@ -19,7 +19,5 @@ import kotlinx.android.parcel.Parcelize
                 onDelete = ForeignKey.CASCADE,
                 onUpdate = ForeignKey.CASCADE)
         ])
-data class SubjectEntity(var title : String?, var date : String?,
-                         var description : String?, var imageRes: String?,
-                         var onTimeline: Int?, var theme_id : String?,
-                         @PrimaryKey var id : String) : Parcelable {}
+data class SubjectEntity(var title : String?, var date : String?, var description : String?, var imageRes: String?,
+                         var onTimeline: Int?, var theme_id : String?, @PrimaryKey var id : String) : Parcelable

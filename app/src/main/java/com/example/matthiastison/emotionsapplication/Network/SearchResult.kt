@@ -6,4 +6,4 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class SearchResult(@Json(name = "total_pages") val total_pages: Int? = null,
-        @Json(name = "results") var results: List<Unsplash>) : Parcelable {}
+        @Json(name = "results") var results: List<Unsplash>) : Parcelable

@@ -20,15 +20,21 @@
             app:srcCompat="@drawable/ic_search" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/edtText_SearchQuery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.9"
             android:ems="10"
-            android:hint="Cats"
+            android:hint="Search in Unsplash API"
             android:inputType="text"
             android:paddingLeft="15dp" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorSubtitleBackground" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/Unsplash_recyclerView"

@@ -65,26 +65,6 @@ abstract class EmotionsAppDb : RoomDatabase() {
             themeDao.insert(theme)
             theme = ThemeEntity("LEVEN",R.color.themeColor4, "4")
             themeDao.insert(theme)
-/*
-            var subject = SubjectEntity("Title1","01/12/2000",
-                    "some description", R.drawable.rage_guy, "1", UUID.randomUUID().toString())
-            subjectDao.insert(subject)
-            subject = SubjectEntity("Title2","01/09/2000",
-                    "some description", R.drawable.y_u_no_guy, "1", UUID.randomUUID().toString())
-            subjectDao.insert(subject)
-            subject = SubjectEntity("Title3","01/05/2000",
-                    "some description", R.drawable.troll_face, "1", UUID.randomUUID().toString())
-            subjectDao.insert(subject)
-            subject = SubjectEntity("Title4","01/02/2000",
-                    "some description", R.drawable.cereal_guy, "3", UUID.randomUUID().toString())
-            subjectDao.insert(subject)
-            subject = SubjectEntity("Title5","01/08/2000",
-                    "some description", R.drawable.oh_crap, "4", UUID.randomUUID().toString())
-            subjectDao.insert(subject)
-            subject = SubjectEntity("Title6","01/04/2000",
-                    "some description", R.drawable.okay, "3", UUID.randomUUID().toString())
-            subjectDao.insert(subject)
-*/
         }
     }
 }

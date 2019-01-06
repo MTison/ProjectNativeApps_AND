@@ -4,6 +4,9 @@ import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import com.example.matthiastison.emotionsapplication.Database.Entities.SubjectEntity
 
+// SUBJECT Data Access Object
+// ///////////////////////////
+
 @Dao
 interface SubjectDao {
 

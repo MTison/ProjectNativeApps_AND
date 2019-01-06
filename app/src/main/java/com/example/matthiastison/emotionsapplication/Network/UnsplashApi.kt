@@ -1,9 +1,7 @@
 package com.example.matthiastison.emotionsapplication.Network
 
-import com.example.matthiastison.emotionsapplication.Utils.API_KEY
 import io.reactivex.Observable
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Query
 
 // The interface which provides methods to get result of the Unsplash webservice

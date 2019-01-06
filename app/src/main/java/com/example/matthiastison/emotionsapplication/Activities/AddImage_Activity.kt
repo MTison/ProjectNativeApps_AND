@@ -13,6 +13,7 @@ class AddImage_Activity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_addimage)
 
+        // create the fragment and add a bundle to the argument, to pass the current theme
         val chooserFragment = Chooser_Fragment()
         val themeExtra = Bundle()
         val theme = intent.getParcelableExtra<ThemeEntity>("THEME_ITEM")
@@ -21,6 +22,7 @@ class AddImage_Activity: AppCompatActivity() {
         setSupportActionBar(AddImage_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        // parcelize the current theme and add to the arguments
         themeExtra.putParcelable("THEME_ITEM", theme)
         chooserFragment.arguments = themeExtra
 

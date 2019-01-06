@@ -4,7 +4,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.example.matthiastison.emotionsapplication.Database.Entities.SubjectEntity
-import com.example.matthiastison.emotionsapplication.Models.TimelineItem
 import com.example.matthiastison.emotionsapplication.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_subjectdetail.*
@@ -26,6 +25,7 @@ class SubjectDetail_Activity: AppCompatActivity() {
     }
 
     private fun makeDetails(item: SubjectEntity) {
+        // set all the details of the subject to the fields in the view
         txtView_SubjectDetailTitle.text = item.title
         Picasso.with(this).load(Uri.parse(item.imageRes)).fit().into(imgView_SubjectDetailImage)
         txtView_SubjectDetailDate.text = item.date

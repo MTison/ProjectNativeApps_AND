@@ -28,7 +28,7 @@ class Start_Activity : AppCompatActivity() {
 
         setupTabIcons()
 
-        Start_activityViewpager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+        Start_activityViewpager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(p0: Int) {}
 
             override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {}
@@ -45,6 +45,7 @@ class Start_Activity : AppCompatActivity() {
     fun setupViewpager(viewpager: ViewPager) {
         var fragments = ArrayList<Fragment>()
 
+        // add the fragments the the viewpager
         fragments.add(Timeline_Fragment())
         fragmentNames.add("Timeline")
         fragments.add(Theme_Fragment())

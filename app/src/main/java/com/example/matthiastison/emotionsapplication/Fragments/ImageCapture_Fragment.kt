@@ -210,7 +210,6 @@ class ImageCapture_Fragment : Fragment() {
         // creating the file for the picture in the fileDir, with fitting prefix and suffix
         val imageFile = File.createTempFile(fileName, ".jpg", fileDir)
 
-        // photoPath = imageFile.absolutePath
         return imageFile
     }
 

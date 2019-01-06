@@ -16,7 +16,6 @@ class ThemesRecyclerAdapter: RecyclerView.Adapter<ThemesRecyclerAdapter.ViewHold
 
     // inflate the view through the parent's inflater and pass it to the viewHolder
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): ViewHolder {
-        // initializing local variable
         var inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.theme_recyclerview_item, parent,false)
         return ViewHolder(inflatedView)
     }
@@ -52,7 +51,6 @@ class ThemesRecyclerAdapter: RecyclerView.Adapter<ThemesRecyclerAdapter.ViewHold
             itemView.context.startActivity(subjectsIntent)
         }
 
-        //TODO: make use of data binding instead
         fun bindItem(item: ThemeEntity) {
             // add attributes of themeItem to the fields in the itemView
             this.item = item
@@ -61,7 +59,6 @@ class ThemesRecyclerAdapter: RecyclerView.Adapter<ThemesRecyclerAdapter.ViewHold
         }
     }
 
-    //TODO: search meaning and use of companion objects
     companion object {
         private val THEME_ITEM_KEY = "THEME_ITEM"
     }

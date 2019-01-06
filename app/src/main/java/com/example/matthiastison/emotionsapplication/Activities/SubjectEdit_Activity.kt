@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -14,9 +13,6 @@ import com.example.matthiastison.emotionsapplication.R
 import com.example.matthiastison.emotionsapplication.ViewModels.SubjectViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_subjectedit.*
-import android.support.v4.os.HandlerCompat.postDelayed
-
-
 
 class SubjectEdit_Activity : AppCompatActivity() {
 
@@ -33,6 +29,7 @@ class SubjectEdit_Activity : AppCompatActivity() {
         SubjectEdit_toolbar.title = "Edit - ${item.title}"
         setSupportActionBar(SubjectEdit_toolbar)
 
+        // set the button to go up to the parent activity and add close icon to it
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
 
@@ -43,23 +40,31 @@ class SubjectEdit_Activity : AppCompatActivity() {
         super.onStart()
 
         btn_SubjectAddTimeline.setOnClickListener {
-            //TODO: add subject item to the timeline
+            // update the current subject in the db, through the viewModel
             item.onTimeline = 1
             subjectViewModel.update(item)
 
-            val resultIntent = intent
-            setResult(RESULT_ADDED_TO_TIMELINE, resultIntent)
-            finish()
+            Toast.makeText(this,"Item will be added!", Toast.LENGTH_SHORT).show()
+            // creating handler to delay the finishing of the activity until after the toast, so the activity can finish afterwards
+            Handler().postDelayed({
+                this@SubjectEdit_Activity.finish()}, 1500)
         }
 
         btn_SubjectDelete.setOnClickListener {
-            //TODO: delete subject item from db
+            // delete subject form the db through the viewModel
             subjectViewModel.delete(item)
 
-            val resultIntent = intent
-            setResult(RESULT_DELETED_SUBJECT, resultIntent)
-            finish()
+            Toast.makeText(this,"Item will be deleted!", Toast.LENGTH_SHORT).show()
+            Handler().postDelayed({
+                this@SubjectEdit_Activity.finish()}, 1500)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // remove the listeners, so no unused references are kept
+        btn_SubjectDelete.setOnClickListener(null)
+        btn_SubjectAddTimeline.setOnClickListener(null)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -70,11 +75,10 @@ class SubjectEdit_Activity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle presses on the action bar menu items
+        // Handle presses on the action bar menu item
         when (item.itemId) {
             R.id.action_SAVE -> {
                 saveSubject()
-                //TODO: update subject item and return to parent activity
                 return true
             }
         }
@@ -89,6 +93,7 @@ class SubjectEdit_Activity : AppCompatActivity() {
     }
 
     private fun saveSubject() {
+        // get the new values to be set to the current subject from the editText fields
         val subjectTitle = edtView_SubjectEditTitle.text.toString()
         val subjectDate = edtView_SubjectEditDate.text.toString()
         val subjectDescription = edtView_SubjectEditDescription.text.toString()
@@ -98,19 +103,14 @@ class SubjectEdit_Activity : AppCompatActivity() {
             return
         }
 
+        // change the current subject's attributes and update is in the db
         item.title = subjectTitle
         item.date = subjectDate
         item.description = subjectDescription
         subjectViewModel.update(item)
 
         Toast.makeText(this,"Item saved!", Toast.LENGTH_SHORT).show()
-        // creating handler to delay the finishing of the activity until after the toast, so the activity can finish afterwards
         Handler().postDelayed({
             this@SubjectEdit_Activity.finish()}, 1500)
-    }
-
-    companion object {
-        var RESULT_ADDED_TO_TIMELINE = 10
-        var RESULT_DELETED_SUBJECT = 11
     }
 }
